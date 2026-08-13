@@ -1,0 +1,37 @@
+{
+  "name": "nexfab-ai-crm",
+  "version": "0.4.2",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "prisma generate && next build",
+    "start": "next start",
+    "worker": "node --experimental-strip-types workers/index.ts",
+    "test:rules": "node --experimental-strip-types tests/salesCashRules.test.ts",
+    "prisma:generate": "prisma generate",
+    "prisma:migrate": "prisma migrate dev",
+    "prisma:validate": "prisma validate --schema prisma/schema.prisma",
+    "db:generate": "prisma generate",
+    "db:validate": "prisma validate",
+    "db:migrate": "prisma migrate dev",
+    "db:seed": "prisma db seed",
+    "db:deploy": "prisma migrate deploy"
+  },
+  "dependencies": {
+    "@ant-design/icons": "latest",
+    "@prisma/client": "6.19.3",
+    "antd": "latest",
+    "next": "latest",
+    "openai": "latest",
+    "prisma": "6.19.3",
+    "react": "latest",
+    "react-dom": "latest"
+  },
+  "devDependencies": {
+    "@types/node": "latest",
+    "@types/react": "latest",
+    "@types/react-dom": "latest",
+    "typescript": "latest"
+  },
+  "type": "module"
+}

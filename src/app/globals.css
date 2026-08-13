@@ -1,0 +1,17 @@
+:root {
+  --crm-bg: #f5f7fb;
+  --crm-card: #ffffff;
+  --crm-border: #e8edf5;
+  --crm-text-muted: #667085;
+  --crm-primary: #185fa5;
+}
+
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--crm-bg); color: #101828; }
+.crm-page { min-height: 100vh; background: var(--crm-bg); }
+.crm-content { padding: 20px; }
+.crm-card-soft { background: #fbfcff; border: 1px solid var(--crm-border); border-radius: 12px; padding: 14px; }
+.crm-muted { color: var(--crm-text-muted); }
+.crm-kpi-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; }
+@media (max-width: 1200px) { .crm-kpi-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 768px) { .crm-kpi-grid { grid-template-columns: 1fr; } .crm-content { padding: 12px; } }
