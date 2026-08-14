@@ -3,6 +3,7 @@
 import { Alert, Button, Card, Col, Row, Space, Table, Tag, Typography } from 'antd'
 import type { ColumnsType } from 'antd/es/table'
 import { AuditOutlined, CheckOutlined, CloseOutlined } from '@ant-design/icons'
+import Link from 'next/link'
 import { AppShell } from '@/components/layout/AppShell'
 import { PageHeader } from '@/components/common/PageHeader'
 import { StatusTag } from '@/components/common/StatusTag'
@@ -11,14 +12,14 @@ import { approvals } from '@/frontend/mockData'
 const { Text } = Typography
 
 const columns: ColumnsType<(typeof approvals)[number]> = [
-  { title: '审批类型', dataIndex: 'type', render: (value, record) => <Space orientation="vertical" size={0}><Text strong>{value}</Text><Text type="secondary">{record.refNo}</Text></Space> },
+  { title: '审批类型', dataIndex: 'type', render: (value, record) => <Space orientation="vertical" size={0}><Link href={`/approvals/${record.key}`}><Text strong>{value}</Text></Link><Text type="secondary">{record.refNo}</Text></Space> },
   { title: '客户', dataIndex: 'customer' },
   { title: '申请人', dataIndex: 'requester' },
   { title: '金额', dataIndex: 'amount' },
   { title: '原因', dataIndex: 'reason' },
   { title: '状态', dataIndex: 'status', render: (status) => <StatusTag value={status} /> },
   { title: '优先级', dataIndex: 'priority', render: (value) => <Tag color={value === 'high' ? 'red' : 'blue'}>{value === 'high' ? '高' : '普通'}</Tag> },
-  { title: '动作', render: () => <Space><Button size="small" icon={<CheckOutlined />} type="primary">通过</Button><Button size="small" danger icon={<CloseOutlined />}>拒绝</Button></Space> },
+  { title: '动作', render: (_, record) => <Space><Link href={`/approvals/${record.key}`}><Button size="small">查看</Button></Link><Button size="small" icon={<CheckOutlined />} type="primary">通过</Button><Button size="small" danger icon={<CloseOutlined />}>拒绝</Button></Space> },
 ]
 
 export default function ApprovalsPage() {

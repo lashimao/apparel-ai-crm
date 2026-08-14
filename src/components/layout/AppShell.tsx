@@ -132,7 +132,7 @@ export function AppShell({ children }: { children: ReactNode }) {
             <Space align="start">
               <WarningOutlined style={{ color: '#cf1322', marginTop: 3 }} />
               <div>
-                <Text strong>销售到回款闭环还有 {riskItems.length} 个待处理点</Text>
+                <Space style={{ width: '100%', justifyContent: 'space-between' }}><Text strong>销售到回款闭环还有 {riskItems.length} 个待处理点</Text><a href="/notifications">完整通知中心</a></Space>
                 <Paragraph type="secondary" style={{ marginBottom: 0 }}>优先处理低毛利审批、逾期尾款、待核销水单和订单发货前阻断项。</Paragraph>
               </div>
             </Space>

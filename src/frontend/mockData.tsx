@@ -266,6 +266,47 @@ export const paymentReceipts = [
   { key: 'PR002', paymentKey: 'P002', file: 'Atlas_deposit_bank_slip.pdf', amount: 'USD 25,920', uploadedAt: '2026-08-10 15:20', status: 'verified' },
   { key: 'PR003', paymentKey: 'P003', file: 'Andes_partial_receipt.png', amount: 'USD 5,000', uploadedAt: '2026-08-11 17:05', status: 'pending' },
 ]
+
+
+export const approvalAuditLogs = [
+  { key: 'AL001', approvalKey: 'A001', time: '2026-08-13 14:20', actor: 'Marco', action: '提交审批', note: 'DDP 运费上涨，综合毛利低于底线，申请主管复核。' },
+  { key: 'AL002', approvalKey: 'A001', time: '2026-08-13 14:28', actor: '系统', action: '规则命中', note: '命中规则：低毛利报价，毛利低于 18% 必须审批。' },
+  { key: 'AL003', approvalKey: 'A001', time: '2026-08-13 15:10', actor: '销售主管', action: '待复核', note: '要求拆分产品成本、DDP 运费和本地派送费用。' },
+  { key: 'AL004', approvalKey: 'A002', time: '2026-08-12 17:45', actor: 'Lina', action: '提交审批', note: '客户要求尾款发货后 15 天支付，需要管理层确认账期风险。' },
+]
+
+export const approvalChecklist = [
+  { key: 'AC001', label: '申请原因清晰，能解释偏离规则的业务背景', required: true },
+  { key: 'AC002', label: '金额、毛利、账期、交期等关键字段已复核', required: true },
+  { key: 'AC003', label: '低毛利或异常账期的风险已同步给负责人', required: true },
+  { key: 'AC004', label: '审批通过后仍需业务员人工发送或确认下一步', required: true },
+  { key: 'AC005', label: '如涉及大客户策略，已记录管理层备注', required: false },
+]
+
+export const quoteToOrderChecklist = [
+  { key: 'CO001', label: '客户已书面确认价格、数量、规格和交期', owner: '销售', required: true },
+  { key: 'CO002', label: '报价明细已锁价，低毛利审批已通过', owner: '销售主管', required: true },
+  { key: 'CO003', label: '付款条款、定金比例、尾款节点已确认', owner: '销售/财务', required: true },
+  { key: 'CO004', label: 'PI / Sales Contract 草稿已准备', owner: '单证', required: false },
+  { key: 'CO005', label: '客户主体、收货人、目的港和贸易条款已校验', owner: '单证', required: true },
+]
+
+export const notificationItems = [
+  { key: 'N001', type: 'approval', title: '低毛利报价待审批', refNo: 'QT-2026-0813-006', customer: 'Pacific Buildmart', level: 'high', owner: '销售主管', due: '今天 18:00', href: '/approvals/A001', status: 'pending' },
+  { key: 'N002', type: 'payment', title: '尾款逾期待核销', refNo: 'PAY-2026-0801-014', customer: 'EuroNova GmbH', level: 'high', owner: '财务', due: '已逾期', href: '/payments', status: 'overdue' },
+  { key: 'N003', type: 'order', title: '发货前收款阻断', refNo: 'SO-2026-0804-009', customer: 'EuroNova GmbH', level: 'normal', owner: '销售/财务', due: '发货前', href: '/orders/O002', status: 'risk' },
+  { key: 'N004', type: 'ai', title: 'AI 回复草稿待确认', refNo: 'INQ-2026-0813-018', customer: 'Nordic Retail Group', level: 'normal', owner: 'Lina', due: '今天', href: '/inquiries/I001', status: 'pending' },
+  { key: 'N005', type: 'document', title: 'PI 草稿待人工校验', refNo: 'PI-2026-0813-003', customer: 'Atlas Import LLC', level: 'normal', owner: 'Lina', due: '明天', href: '/documents/D001', status: 'draft' },
+]
+
+export const rolePermissionMatrix = [
+  { key: 'PM001', module: '客户', admin: '全部', management: '查看全部', sales_manager: '团队客户', sales: '本人客户', finance: '只读关联客户' },
+  { key: 'PM002', module: '询盘', admin: '全部', management: '查看全部', sales_manager: '分配/转移', sales: '处理本人', finance: '无' },
+  { key: 'PM003', module: '报价', admin: '全部', management: '查看全部', sales_manager: '审批/复核', sales: '新建/编辑草稿', finance: '查看金额' },
+  { key: 'PM004', module: '订单', admin: '全部', management: '查看全部', sales_manager: '团队订单', sales: '本人订单', finance: '查看收款节点' },
+  { key: 'PM005', module: '回款', admin: '全部', management: '查看汇总', sales_manager: '团队查看', sales: '查看本人订单回款', finance: '登记/核销' },
+  { key: 'PM006', module: 'AI', admin: '配置边界', management: '查看报告', sales_manager: '审核团队输出', sales: '生成草稿', finance: 'OCR/核销建议' },
+]
 export const salesCashMilestones = [
   { key: 'M001', title: '询盘进入', desc: 'AI 识别产品、数量、语言、意向与缺失字段', owner: '销售' },
   { key: 'M002', title: '报价核算', desc: '成本、费用、运费、汇率、毛利底线全部可见', owner: '销售' },
