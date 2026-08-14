@@ -17,7 +17,7 @@ export function PageHeader({
   return (
     <Row gutter={[16, 16]} align="middle" justify="space-between">
       <Col xs={24} lg={15}>
-        <Space direction="vertical" size={4}>
+        <Space orientation="vertical" size={4}>
           <Title level={2} style={{ margin: 0 }}>{title}</Title>
           <Text type="secondary">{subtitle}</Text>
         </Space>

@@ -14,8 +14,8 @@ export function KpiCard({ title, value, suffix, trend, color, prefix }: {
   prefix?: ReactNode
 }) {
   return (
-    <Card bordered={false}>
-      <Statistic title={title} value={value} suffix={suffix} prefix={prefix} valueStyle={{ color: color || '#185fa5' }} />
+    <Card variant="borderless">
+      <Statistic title={title} value={value} suffix={suffix} prefix={prefix} styles={{ content: { color: color || '#185fa5' } }} />
       {trend ? <Text type="secondary">{trend}</Text> : null}
     </Card>
   )

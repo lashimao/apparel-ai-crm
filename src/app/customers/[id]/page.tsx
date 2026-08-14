@@ -9,6 +9,7 @@ import { useMemo, useState } from 'react'
 import { AppShell } from '@/components/layout/AppShell'
 import { PageHeader } from '@/components/common/PageHeader'
 import { StatusTag } from '@/components/common/StatusTag'
+import { NextActionPanel } from '@/components/common/NextActionPanel'
 import { customerContacts, customerFollowUps, customers, inquiries, orders, payments, quotations } from '@/frontend/mockData'
 
 const { Text, Paragraph } = Typography
@@ -35,9 +36,9 @@ export default function CustomerDetailPage() {
   ], [customerInquiries, customerOrders, customerPayments, customerQuotes])
 
   const contactColumns: ColumnsType<ContactRecord> = [
-    { title: '联系人', dataIndex: 'name', render: (value, record) => <Space direction="vertical" size={0}><Text strong>{value}</Text><Text type="secondary">{record.role}</Text></Space> },
+    { title: '联系人', dataIndex: 'name', render: (value, record) => <Space orientation="vertical" size={0}><Text strong>{value}</Text><Text type="secondary">{record.role}</Text></Space> },
     { title: '邮箱', dataIndex: 'email' },
-    { title: '电话 / WhatsApp', render: (_, record) => <Space direction="vertical" size={0}><Text>{record.phone}</Text><Text type="secondary">{record.whatsapp}</Text></Space> },
+    { title: '电话 / WhatsApp', render: (_, record) => <Space orientation="vertical" size={0}><Text>{record.phone}</Text><Text type="secondary">{record.whatsapp}</Text></Space> },
     { title: '沟通偏好', dataIndex: 'preference' },
     { title: '决策角色', dataIndex: 'decision', render: (value) => <Tag color={value.includes('核心') ? 'green' : 'blue'}>{value}</Tag> },
   ]
@@ -52,7 +53,7 @@ export default function CustomerDetailPage() {
 
   return (
     <AppShell>
-      <Space direction="vertical" size={20} style={{ width: '100%' }}>
+      <Space orientation="vertical" size={20} style={{ width: '100%' }}>
         <PageHeader
           title={customer.company}
           subtitle="客户详情、联系人、跟进、询盘、报价、订单、回款和 AI 摘要"
@@ -66,15 +67,15 @@ export default function CustomerDetailPage() {
         />
 
         <Row gutter={[16, 16]}>
-          <Col xs={12} lg={6}><Card bordered={false}><Statistic title="客户等级" value={`${customer.level} 级`} prefix={<SafetyCertificateOutlined />} valueStyle={{ color: customer.level === 'A' ? '#0f6e56' : '#185fa5' }} /></Card></Col>
-          <Col xs={12} lg={6}><Card bordered={false}><Statistic title="累计价值" value={customer.value.replace('USD ', '')} prefix={<DollarOutlined />} suffix="USD" /></Card></Col>
-          <Col xs={12} lg={6}><Card bordered={false}><Statistic title="业务记录" value={businessRows.length} suffix="条" /></Card></Col>
-          <Col xs={12} lg={6}><Card bordered={false}><Statistic title="联系人" value={contacts.length || 1} suffix="位" /></Card></Col>
+          <Col xs={12} lg={6}><Card variant="borderless"><Statistic title="客户等级" value={`${customer.level} 级`} prefix={<SafetyCertificateOutlined />} styles={{ content: { color: customer.level === 'A' ? '#0f6e56' : '#185fa5' } }} /></Card></Col>
+          <Col xs={12} lg={6}><Card variant="borderless"><Statistic title="累计价值" value={customer.value.replace('USD ', '')} prefix={<DollarOutlined />} suffix="USD" /></Card></Col>
+          <Col xs={12} lg={6}><Card variant="borderless"><Statistic title="业务记录" value={businessRows.length} suffix="条" /></Card></Col>
+          <Col xs={12} lg={6}><Card variant="borderless"><Statistic title="联系人" value={contacts.length || 1} suffix="位" /></Card></Col>
         </Row>
 
         <Row gutter={[16, 16]}>
           <Col xs={24} xl={16}>
-            <Card bordered={false} title="客户档案">
+            <Card variant="borderless" title="客户档案">
               <Descriptions bordered column={2} size="small" items={[
                 { key: 'country', label: '国家', children: customer.country },
                 { key: 'source', label: '来源', children: customer.source },
@@ -87,7 +88,7 @@ export default function CustomerDetailPage() {
               ]} />
             </Card>
 
-            <Card bordered={false} style={{ marginTop: 16 }}>
+            <Card variant="borderless" style={{ marginTop: 16 }}>
               <Tabs
                 items={[
                   {
@@ -116,25 +117,27 @@ export default function CustomerDetailPage() {
           </Col>
 
           <Col xs={24} xl={8}>
-            <Card bordered={false} title="AI 客户摘要">
-              <Space direction="vertical" size={12}>
+            <Card variant="borderless" title="AI 客户摘要">
+              <Space orientation="vertical" size={12}>
                 <Paragraph>客户处于「{customer.stage}」阶段，当前关键动作是：<Text strong>{customer.nextAction}</Text>。</Paragraph>
                 <div className="crm-card-soft"><Text strong>风险提示</Text><br /><Text type="secondary">{customer.risk}。建议业务员今天内补充沟通记录，并确认是否需要主管或财务介入。</Text></div>
                 <div className="crm-card-soft"><Text strong>推荐动作</Text><br /><Text type="secondary">优先补齐联系人职责、报价条件和回款计划，所有 AI 草稿仅作为建议，不能自动对外发送。</Text></div>
               </Space>
             </Card>
 
-            <Card bordered={false} title="客户旅程" style={{ marginTop: 16 }}>
+            <div style={{ marginTop: 16 }}><NextActionPanel items={[{ key: 'n1', title: customer.nextAction, desc: '根据客户当前阶段生成，完成后应写入跟进记录。', owner: customer.owner, level: customer.risk.includes('逾期') ? 'risk' : 'warning' }, { key: 'n2', title: '补齐联系人与付款偏好', desc: '避免报价、PI、收款节点无人确认。', owner: '销售', level: 'normal' }, { key: 'n3', title: '检查是否需要主管/财务介入', desc: '低毛利、逾期尾款、异常账期需进入审批或核销流程。', owner: '主管/财务', level: 'warning' }]} /></div>
+
+            <Card variant="borderless" title="客户旅程" style={{ marginTop: 16 }}>
               <Timeline items={[
-                { color: 'blue', children: '线索建档 / 客户查重' },
-                { color: 'blue', children: '询盘识别与需求补齐' },
-                { color: customerQuotes.length ? 'green' : 'gray', children: '报价核算与人工锁价' },
-                { color: customerOrders.length ? 'green' : 'gray', children: '订单履约与单证归档' },
-                { color: customerPayments.length ? 'orange' : 'gray', children: '回款计划与财务核销' },
+                { color: 'blue', content: '线索建档 / 客户查重' },
+                { color: 'blue', content: '询盘识别与需求补齐' },
+                { color: customerQuotes.length ? 'green' : 'gray', content: '报价核算与人工锁价' },
+                { color: customerOrders.length ? 'green' : 'gray', content: '订单履约与单证归档' },
+                { color: customerPayments.length ? 'orange' : 'gray', content: '回款计划与财务核销' },
               ]} />
             </Card>
 
-            <Card bordered={false} title="快捷动作" style={{ marginTop: 16 }}>
+            <Card variant="borderless" title="快捷动作" style={{ marginTop: 16 }}>
               <Space wrap>
                 <Button icon={<MailOutlined />}>写邮件</Button>
                 <Link href="/quotations/new"><Button>新报价</Button></Link>

@@ -26,3 +26,6 @@ build/
 # local runtime
 coverage/
 .cache/
+
+# local audit screenshots
+audit-screenshots-*/

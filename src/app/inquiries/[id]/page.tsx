@@ -9,6 +9,7 @@ import { useState } from 'react'
 import { AppShell } from '@/components/layout/AppShell'
 import { PageHeader } from '@/components/common/PageHeader'
 import { StatusTag } from '@/components/common/StatusTag'
+import { NextActionPanel } from '@/components/common/NextActionPanel'
 import { inquiries, inquiryMessages, inquiryRequirements } from '@/frontend/mockData'
 
 const { Paragraph, Text } = Typography
@@ -33,7 +34,7 @@ export default function InquiryDetailPage() {
 
   return (
     <AppShell>
-      <Space direction="vertical" size={20} style={{ width: '100%' }}>
+      <Space orientation="vertical" size={20} style={{ width: '100%' }}>
         <PageHeader
           title={inquiry.inquiryNo}
           subtitle="询盘详情、原文翻译、AI 识别、回复草稿、条件补齐和转报价入口"
@@ -47,17 +48,17 @@ export default function InquiryDetailPage() {
           )}
         />
 
-        <Alert showIcon type="warning" message="AI 回复草稿不能自动发送；缺少数量、目的港、包装或付款条款时必须先补充确认。" />
+        <Alert showIcon type="warning" title="AI 回复草稿不能自动发送；缺少数量、目的港、包装或付款条款时必须先补充确认。" />
 
         <Row gutter={[16, 16]}>
-          <Col xs={24} lg={8}><Card bordered={false}><Text type="secondary">AI 成交评分</Text><Progress percent={inquiry.aiScore} strokeColor={inquiry.aiScore >= 85 ? '#52c41a' : '#faad14'} /></Card></Col>
-          <Col xs={24} lg={8}><Card bordered={false}><Text type="secondary">缺失报价条件</Text><div style={{ fontSize: 28, fontWeight: 700, color: missingCount ? '#cf1322' : '#0f6e56' }}>{missingCount} 项</div></Card></Col>
-          <Col xs={24} lg={8}><Card bordered={false}><Text type="secondary">处理状态</Text><div style={{ marginTop: 10 }}><StatusTag value={inquiry.status} /></div></Card></Col>
+          <Col xs={24} lg={8}><Card variant="borderless"><Text type="secondary">AI 成交评分</Text><Progress percent={inquiry.aiScore} strokeColor={inquiry.aiScore >= 85 ? '#52c41a' : '#faad14'} /></Card></Col>
+          <Col xs={24} lg={8}><Card variant="borderless"><Text type="secondary">缺失报价条件</Text><div style={{ fontSize: 28, fontWeight: 700, color: missingCount ? '#cf1322' : '#0f6e56' }}>{missingCount} 项</div></Card></Col>
+          <Col xs={24} lg={8}><Card variant="borderless"><Text type="secondary">处理状态</Text><div style={{ marginTop: 10 }}><StatusTag value={inquiry.status} /></div></Card></Col>
         </Row>
 
         <Row gutter={[16, 16]}>
           <Col xs={24} xl={15}>
-            <Card bordered={false} title="询盘信息">
+            <Card variant="borderless" title="询盘信息">
               <Descriptions bordered column={2} size="small" items={[
                 { key: 'customer', label: '客户', children: inquiry.customer },
                 { key: 'country', label: '国家', children: inquiry.country },
@@ -68,11 +69,11 @@ export default function InquiryDetailPage() {
               ]} />
             </Card>
 
-            <Card bordered={false} title="报价条件核对" style={{ marginTop: 16 }} extra={<Button size="small" onClick={() => setDrawerOpen(true)}>补齐并转报价</Button>}>
+            <Card variant="borderless" title="报价条件核对" style={{ marginTop: 16 }} extra={<Button size="small" onClick={() => setDrawerOpen(true)}>补齐并转报价</Button>}>
               <Table size="small" pagination={false} columns={requirementColumns} dataSource={requirements} />
             </Card>
 
-            <Card bordered={false} title="AI 回复草稿" style={{ marginTop: 16 }}>
+            <Card variant="borderless" title="AI 回复草稿" style={{ marginTop: 16 }}>
               <TextArea rows={9} defaultValue={`Dear customer,\n\nThanks for your inquiry about ${inquiry.product}. We can provide FOB/CIF/DDP quotation after confirming the following details:\n1. Estimated order quantity\n2. Destination port / delivery address\n3. Packaging requirement\n4. Target lead time and payment terms\n\nOnce confirmed, our sales team will prepare an official quotation for your manual approval.\n\nBest regards,\nNexFab Sales Team`} />
               <Space style={{ marginTop: 12 }} wrap>
                 <Button>保存草稿</Button>
@@ -83,24 +84,26 @@ export default function InquiryDetailPage() {
           </Col>
 
           <Col xs={24} xl={9}>
-            <Card bordered={false} title="处理流程">
-              <Steps direction="vertical" current={missingCount ? 2 : 3} items={[
-                { title: '接收询盘', description: inquiry.receivedAt },
-                { title: 'AI 翻译/识别', description: `${inquiry.aiScore}% 成交评分` },
-                { title: '补齐报价条件', description: missingCount ? `仍缺 ${missingCount} 项` : '已满足转报价' },
-                { title: '生成报价', description: '进入报价编辑页' },
-                { title: '客户确认', description: '确认后转订单' },
+            <Card variant="borderless" title="处理流程">
+              <Steps orientation="vertical" current={missingCount ? 2 : 3} items={[
+                { title: '接收询盘', content: inquiry.receivedAt },
+                { title: 'AI 翻译/识别', content: `${inquiry.aiScore}% 成交评分` },
+                { title: '补齐报价条件', content: missingCount ? `仍缺 ${missingCount} 项` : '已满足转报价' },
+                { title: '生成报价', content: '进入报价编辑页' },
+                { title: '客户确认', content: '确认后转订单' },
               ]} />
             </Card>
 
-            <Card bordered={false} title="原文与 AI 记录" style={{ marginTop: 16 }}>
+            <Card variant="borderless" title="原文与 AI 记录" style={{ marginTop: 16 }}>
               <Timeline items={(messages.length ? messages : inquiryMessages.slice(0, 2)).map((item) => ({
                 color: item.sender === 'customer' ? 'blue' : 'purple',
-                children: <Space direction="vertical" size={2}><Text strong>{item.channel} · {item.time}</Text><Paragraph style={{ marginBottom: 0 }}>{item.content}</Paragraph></Space>,
+                content: <Space orientation="vertical" size={2}><Text strong>{item.channel} · {item.time}</Text><Paragraph style={{ marginBottom: 0 }}>{item.content}</Paragraph></Space>,
               }))} />
             </Card>
 
-            <Card bordered={false} title="AI 识别结果" style={{ marginTop: 16 }}>
+            <div style={{ marginTop: 16 }}><NextActionPanel items={[{ key: 'i1', title: '补齐缺失报价条件', desc: missingCount ? `仍缺 ${missingCount} 项，不能直接生成正式报价。` : '报价条件已满足，可进入报价编辑。', owner: inquiry.owner, level: missingCount ? 'risk' : 'done' }, { key: 'i2', title: '人工确认回复草稿', desc: 'AI 草稿不能自动发送，需业务员确认语气、价格边界和承诺内容。', owner: '销售', level: 'warning' }, { key: 'i3', title: '转报价并锁定成本口径', desc: '进入报价编辑后再做毛利和运费测算。', owner: '销售', level: 'normal', href: '/quotations/new' }]} /></div>
+
+            <Card variant="borderless" title="AI 识别结果" style={{ marginTop: 16 }}>
               <Paragraph><Text strong>产品：</Text>{inquiry.product}</Paragraph>
               <Paragraph><Text strong>客户意图：</Text>询价 + 交期确认 + 批量采购评估。</Paragraph>
               <Paragraph><Text strong>边界：</Text>AI 只生成草稿和风险提示，正式报价与对外发送必须人工确认。</Paragraph>
@@ -109,7 +112,7 @@ export default function InquiryDetailPage() {
         </Row>
       </Space>
 
-      <Drawer title="补齐条件并转报价" open={drawerOpen} onClose={() => setDrawerOpen(false)} width={520} extra={<Link href="/quotations/new"><Button type="primary">生成报价草稿</Button></Link>}>
+      <Drawer title="补齐条件并转报价" open={drawerOpen} onClose={() => setDrawerOpen(false)} size={520} extra={<Link href="/quotations/new"><Button type="primary">生成报价草稿</Button></Link>}>
         <Form layout="vertical">
           <Form.Item label="产品与规格"><Input defaultValue={inquiry.product} /></Form.Item>
           <Form.Item label="数量"><Input placeholder="例如：3000 kg / 1x40HQ" /></Form.Item>
@@ -117,7 +120,7 @@ export default function InquiryDetailPage() {
           <Form.Item label="目的港/地址"><Input placeholder="例如：Hamburg, Germany" /></Form.Item>
           <Form.Item label="包装要求"><Input placeholder="中性包装 / OEM 彩盒 / 托盘" /></Form.Item>
           <Form.Item label="生成报价前检查">
-            <Space direction="vertical">
+            <Space orientation="vertical">
               <Checkbox>报价条件已补齐</Checkbox>
               <Checkbox>客户未与其他业务员撞单</Checkbox>
               <Checkbox>AI 草稿仅作为参考，报价由业务员确认</Checkbox>

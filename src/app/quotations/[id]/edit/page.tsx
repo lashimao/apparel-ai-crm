@@ -33,7 +33,7 @@ export default function QuotationEditPage() {
   }, [lineItems])
 
   const lineColumns: ColumnsType<LineItem> = [
-    { title: '产品', dataIndex: 'product', fixed: 'left', width: 190, render: (value, record) => <Space direction="vertical" size={0}><Text strong>{value}</Text><Text type="secondary">{record.spec}</Text></Space> },
+    { title: '产品', dataIndex: 'product', fixed: 'left', width: 190, render: (value, record) => <Space orientation="vertical" size={0}><Text strong>{value}</Text><Text type="secondary">{record.spec}</Text></Space> },
     { title: '数量', dataIndex: 'qty', width: 120, render: (value, record) => <InputNumber defaultValue={value} suffix={record.unit} style={{ width: 110 }} /> },
     { title: '成本', dataIndex: 'cost', width: 110, render: (value) => <InputNumber defaultValue={value} prefix="$" precision={2} style={{ width: 100 }} /> },
     { title: '运费', dataIndex: 'freight', width: 110, render: (value) => <InputNumber defaultValue={value} prefix="$" precision={2} style={{ width: 100 }} /> },
@@ -51,7 +51,7 @@ export default function QuotationEditPage() {
 
   return (
     <AppShell>
-      <Space direction="vertical" size={20} style={{ width: '100%' }}>
+      <Space orientation="vertical" size={20} style={{ width: '100%' }}>
         <PageHeader
           title={`编辑报价：${quote.quoteNo}`}
           subtitle="产品明细、成本费用、目标毛利、审批理由、人工锁价和发送前检查"
@@ -66,23 +66,51 @@ export default function QuotationEditPage() {
           )}
         />
 
-        {requiresApproval ? <Alert showIcon type="error" message={`当前毛利率 ${quote.profitRate}% 低于底线 ${quote.minProfitRate}%，必须填写原因并完成主管审批后才能发送。`} /> : <Alert showIcon type="success" message="当前报价满足毛利底线，但仍需人工锁价和发送前校验。" />}
+        {requiresApproval ? <Alert showIcon type="error" title={`当前毛利率 ${quote.profitRate}% 低于底线 ${quote.minProfitRate}%，必须填写原因并完成主管审批后才能发送。`} /> : <Alert showIcon type="success" title="当前报价满足毛利底线，但仍需人工锁价和发送前校验。" />}
 
         <Row gutter={[16, 16]}>
-          <Col xs={12} lg={6}><Card bordered={false}><Statistic title="报价金额" value={quote.amount} prefix={quote.currency} /></Card></Col>
-          <Col xs={12} lg={6}><Card bordered={false}><Statistic title="测算收入" value={Math.round(totals.revenue)} prefix="USD" /></Card></Col>
-          <Col xs={12} lg={6}><Card bordered={false}><Statistic title="测算毛利" value={Math.round(totals.profit)} prefix="USD" valueStyle={{ color: totals.rate < quote.minProfitRate ? '#cf1322' : '#0f6e56' }} /></Card></Col>
-          <Col xs={12} lg={6}><Card bordered={false}><Statistic title="综合毛利率" value={totals.rate.toFixed(1)} suffix="%" valueStyle={{ color: totals.rate < quote.minProfitRate ? '#cf1322' : '#0f6e56' }} /></Card></Col>
+          <Col xs={12} lg={6}><Card variant="borderless"><Statistic title="报价金额" value={quote.amount} prefix={quote.currency} /></Card></Col>
+          <Col xs={12} lg={6}><Card variant="borderless"><Statistic title="测算收入" value={Math.round(totals.revenue)} prefix="USD" /></Card></Col>
+          <Col xs={12} lg={6}><Card variant="borderless"><Statistic title="测算毛利" value={Math.round(totals.profit)} prefix="USD" styles={{ content: { color: totals.rate < quote.minProfitRate ? '#cf1322' : '#0f6e56' } }} /></Card></Col>
+          <Col xs={12} lg={6}><Card variant="borderless"><Statistic title="综合毛利率" value={totals.rate.toFixed(1)} suffix="%" styles={{ content: { color: totals.rate < quote.minProfitRate ? '#cf1322' : '#0f6e56' } }} /></Card></Col>
         </Row>
 
         <Row gutter={[16, 16]}>
           <Col xs={24} xl={16}>
-            <Card bordered={false}>
+            <Card variant="borderless">
               <Tabs items={[
                 {
                   key: 'items',
                   label: '报价明细',
-                  children: <Table size="small" pagination={false} columns={lineColumns} dataSource={lineItems} scroll={{ x: 980 }} />,
+                  children: (
+                    <Space orientation="vertical" size={12} style={{ width: '100%' }}>
+                      {lineItems.map((item) => {
+                        const lineRevenue = item.qty * item.price
+                        const lineCost = item.qty * (item.cost + item.freight + item.fee)
+                        return (
+                          <Card key={item.key} size="small" className="crm-line-card">
+                            <Row gutter={[12, 12]} align="middle">
+                              <Col xs={24} lg={6}>
+                                <Text strong>{item.product}</Text><br />
+                                <Text type="secondary">{item.spec}</Text>
+                              </Col>
+                              <Col xs={12} lg={4}><Text type="secondary">数量</Text><br /><InputNumber defaultValue={item.qty} suffix={item.unit} style={{ width: '100%', minWidth: 108 }} /></Col>
+                              <Col xs={12} lg={3}><Text type="secondary">成本</Text><br /><InputNumber defaultValue={item.cost} prefix="$" precision={2} style={{ width: '100%' }} /></Col>
+                              <Col xs={12} lg={3}><Text type="secondary">运杂费</Text><br /><InputNumber defaultValue={item.freight + item.fee} prefix="$" precision={2} style={{ width: '100%' }} /></Col>
+                              <Col xs={12} lg={3}><Text type="secondary">报价</Text><br /><InputNumber defaultValue={item.price} prefix="$" precision={2} style={{ width: '100%' }} /></Col>
+                              <Col xs={12} lg={3}><Text type="secondary">毛利率</Text><br /><Tag color={item.profitRate < quote.minProfitRate ? 'red' : 'green'}>{item.profitRate}%</Tag></Col>
+                              <Col xs={12} lg={3}><Text type="secondary">锁价</Text><br /><Tag color={item.locked ? 'green' : 'orange'}>{item.locked ? '已锁价' : '待锁价'}</Tag></Col>
+                              <Col xs={24}>
+                                <div className="crm-line-summary">
+                                  <Text type="secondary">本行收入：USD {Math.round(lineRevenue).toLocaleString()} · 本行成本：USD {Math.round(lineCost).toLocaleString()} · 风险：{item.profitRate < quote.minProfitRate ? '低于毛利底线，需审批' : '毛利正常'}</Text>
+                                </div>
+                              </Col>
+                            </Row>
+                          </Card>
+                        )
+                      })}
+                    </Space>
+                  ),
                 },
                 {
                   key: 'costs',
@@ -109,8 +137,8 @@ export default function QuotationEditPage() {
           </Col>
 
           <Col xs={24} xl={8}>
-            <Card bordered={false} title="报价状态">
-              <Space direction="vertical" size={12} style={{ width: '100%' }}>
+            <Card variant="borderless" title="报价状态">
+              <Space orientation="vertical" size={12} style={{ width: '100%' }}>
                 <div><Text type="secondary">客户</Text><br /><Text strong>{quote.customer}</Text></div>
                 <div><Text type="secondary">当前状态</Text><br /><StatusTag value={quote.status} /></div>
                 <div><Text type="secondary">审批状态</Text><br /><StatusTag value={quote.approvalStatus} /></div>
@@ -120,8 +148,8 @@ export default function QuotationEditPage() {
               </Space>
             </Card>
 
-            <Card bordered={false} title="发送前检查" style={{ marginTop: 16 }}>
-              <Space direction="vertical">
+            <Card variant="borderless" title="发送前检查" style={{ marginTop: 16 }}>
+              <Space orientation="vertical">
                 <Checkbox defaultChecked={lineItems.every((item) => item.locked)}>报价明细已人工锁价</Checkbox>
                 <Checkbox defaultChecked={!requiresApproval}>毛利底线已满足或已审批</Checkbox>
                 <Checkbox defaultChecked>报价有效期已填写</Checkbox>
@@ -141,7 +169,7 @@ export default function QuotationEditPage() {
       </Modal>
 
       <Modal title="发送前校验" open={sendOpen} onCancel={() => setSendOpen(false)} okText="确认，进入发送" cancelText="继续编辑" onOk={() => setSendOpen(false)}>
-        <Alert showIcon type={requiresApproval ? 'error' : 'info'} message={requiresApproval ? '仍存在低毛利审批风险，当前版本不能直接发送。' : '校验通过后仍需业务员最终确认发送。'} />
+        <Alert showIcon type={requiresApproval ? 'error' : 'info'} title={requiresApproval ? '仍存在低毛利审批风险，当前版本不能直接发送。' : '校验通过后仍需业务员最终确认发送。'} />
       </Modal>
     </AppShell>
   )

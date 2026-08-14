@@ -9,6 +9,7 @@ import { useState } from 'react'
 import { AppShell } from '@/components/layout/AppShell'
 import { PageHeader } from '@/components/common/PageHeader'
 import { StatusTag } from '@/components/common/StatusTag'
+import { NextActionPanel } from '@/components/common/NextActionPanel'
 import { documents, orderMilestones, orderProducts, orders, payments } from '@/frontend/mockData'
 
 const { Text, Paragraph } = Typography
@@ -44,7 +45,7 @@ export default function OrderDetailPage() {
 
   return (
     <AppShell>
-      <Space direction="vertical" size={20} style={{ width: '100%' }}>
+      <Space orientation="vertical" size={20} style={{ width: '100%' }}>
         <PageHeader
           title={order.orderNo}
           subtitle="订单详情、产品履约、生产进度、收款计划、单证和发货风险"
@@ -57,11 +58,11 @@ export default function OrderDetailPage() {
           )}
         />
 
-        <Alert showIcon type={hasPaymentRisk ? 'warning' : 'info'} message={hasPaymentRisk ? '存在收款风险：发货前必须完成对应款项核销，并保留财务确认记录。' : '订单完结必须满足：已发货、尾款已核销、关键单证已归档。'} />
+        <Alert showIcon type={hasPaymentRisk ? 'warning' : 'info'} title={hasPaymentRisk ? '存在收款风险：发货前必须完成对应款项核销，并保留财务确认记录。' : '订单完结必须满足：已发货、尾款已核销、关键单证已归档。'} />
 
         <Row gutter={[16, 16]}>
           <Col xs={24} xl={16}>
-            <Card bordered={false} title="订单摘要">
+            <Card variant="borderless" title="订单摘要">
               <Descriptions bordered size="small" column={2} items={[
                 { key: 'customer', label: '客户', children: order.customer },
                 { key: 'amount', label: '金额', children: order.amount },
@@ -73,11 +74,11 @@ export default function OrderDetailPage() {
               ]} />
             </Card>
 
-            <Card bordered={false} title="产品履约" style={{ marginTop: 16 }}>
+            <Card variant="borderless" title="产品履约" style={{ marginTop: 16 }}>
               <Table size="small" pagination={false} dataSource={products.length ? products : orderProducts.slice(0, 2)} columns={productColumns} />
             </Card>
 
-            <Card bordered={false} title="回款计划" style={{ marginTop: 16 }} extra={<Link href="/payments"><Button size="small">去核销</Button></Link>}>
+            <Card variant="borderless" title="回款计划" style={{ marginTop: 16 }} extra={<Link href="/payments"><Button size="small">去核销</Button></Link>}>
               <Table size="small" pagination={false} dataSource={orderPayments} columns={[
                 { title: '编号', dataIndex: 'paymentNo' },
                 { title: '类型', dataIndex: 'type' },
@@ -88,7 +89,7 @@ export default function OrderDetailPage() {
               ]} />
             </Card>
 
-            <Card bordered={false} title="单证归档" style={{ marginTop: 16 }}>
+            <Card variant="borderless" title="单证归档" style={{ marginTop: 16 }}>
               <Table size="small" pagination={false} dataSource={orderDocs} columns={[
                 { title: '单证号', dataIndex: 'docNo', render: (value, record) => <Link href={`/documents/${record.key}`}>{value}</Link> },
                 { title: '类型', dataIndex: 'type' },
@@ -99,8 +100,8 @@ export default function OrderDetailPage() {
           </Col>
 
           <Col xs={24} xl={8}>
-            <Card bordered={false} title="履约流程">
-              <Steps direction="vertical" current={order.status === 'ready_to_ship' ? 4 : 3} items={[
+            <Card variant="borderless" title="履约流程">
+              <Steps orientation="vertical" current={order.status === 'ready_to_ship' ? 4 : 3} items={[
                 { title: '待确认' },
                 { title: '已确认' },
                 { title: '定金已核销' },
@@ -111,21 +112,23 @@ export default function OrderDetailPage() {
               ]} />
             </Card>
 
-            <Card bordered={false} title="订单里程碑" style={{ marginTop: 16 }}>
+            <Card variant="borderless" title="订单里程碑" style={{ marginTop: 16 }}>
               <Timeline items={(milestones.length ? milestones : orderMilestones.slice(0, 4)).map((item) => ({
                 color: item.status === 'completed' ? 'green' : item.status === 'risk' ? 'red' : item.status === 'processing' ? 'blue' : 'gray',
-                children: <Space direction="vertical" size={2}><Text strong>{item.title} · {item.date}</Text><Text type="secondary">{item.note}</Text></Space>,
+                content: <Space orientation="vertical" size={2}><Text strong>{item.title} · {item.date}</Text><Text type="secondary">{item.note}</Text></Space>,
               }))} />
             </Card>
 
-            <Card bordered={false} title="AI 风险摘要" style={{ marginTop: 16 }}>
+            <div style={{ marginTop: 16 }}><NextActionPanel items={[{ key: 'o1', title: '确认收款是否可放行', desc: hasPaymentRisk ? '存在收款风险，发货动作前必须由财务确认。' : '收款暂无阻断风险，继续检查单证。', owner: '财务', level: hasPaymentRisk ? 'risk' : 'done', href: '/payments' }, { key: 'o2', title: '同步生产进度', desc: `当前履约进度 ${order.progress}%，需保持交期和产能同步。`, owner: order.owner, level: 'normal' }, { key: 'o3', title: '检查关键单证归档', desc: 'PI / CI / PL / BL 缺失会影响发货与收款闭环。', owner: '单证', level: 'warning', href: '/documents' }]} /></div>
+
+            <Card variant="borderless" title="AI 风险摘要" style={{ marginTop: 16 }}>
               <Paragraph>当前进度 <Text strong>{order.progress}%</Text>，交期为 <Text strong>{order.deliveryDate}</Text>。</Paragraph>
               <Paragraph type="secondary">如存在尾款、定金或单证缺失风险，系统应在发货动作前阻断并要求责任人确认。</Paragraph>
             </Card>
           </Col>
         </Row>
 
-        <Card bordered={false} title="里程碑明细">
+        <Card variant="borderless" title="里程碑明细">
           <Table size="small" pagination={false} dataSource={milestones.length ? milestones : orderMilestones.slice(0, 4)} columns={milestoneColumns} />
         </Card>
       </Space>

@@ -19,14 +19,14 @@ function iconForColumn(key: string) {
 export default function SalesCashPage() {
   return (
     <AppShell>
-      <Space direction="vertical" size={20} style={{ width: '100%' }}>
+      <Space orientation="vertical" size={20} style={{ width: '100%' }}>
         <PageHeader
           title="销售到回款闭环看板"
           subtitle="把询盘、报价、审批、订单、单证、回款放在同一张业务地图里，优先暴露阻塞点。"
           actions={<Space wrap><Segmented defaultValue="all" options={[{ label: '全部', value: 'all' }, { label: '我负责', value: 'mine' }, { label: '高风险', value: 'risk' }]} /><Button icon={<ExportOutlined />}>导出</Button><Button type="primary" icon={<SwapOutlined />}>新建闭环任务</Button></Space>}
         />
 
-        <Alert showIcon type="warning" message="闭环看板只展示和推动业务动作；AI 不得自动发送报价、确认订单或核销回款。" />
+        <Alert showIcon type="warning" title="闭环看板只展示和推动业务动作；AI 不得自动发送报价、确认订单或核销回款。" />
 
         <Row gutter={[16, 16]}>
           <Col xs={24} md={6}><KpiCard title="询盘待补字段" value={9} suffix="项" trend="影响 4 份报价" prefix={<MailOutlined />} color="#1677ff" /></Col>
@@ -39,16 +39,16 @@ export default function SalesCashPage() {
           {salesCashBoard.map((column) => (
             <Col xs={24} md={12} xl={6} key={column.key}>
               <Card
-                bordered={false}
+                variant="borderless"
                 title={<Space>{iconForColumn(column.key)} {column.title}</Space>}
                 extra={<Tag color={column.color}>{column.items.length}</Tag>}
                 style={{ height: '100%' }}
               >
                 <Paragraph type="secondary">{column.summary}</Paragraph>
-                <Space direction="vertical" size={12} style={{ width: '100%' }}>
+                <Space orientation="vertical" size={12} style={{ width: '100%' }}>
                   {column.items.map((item) => (
                     <div key={item.key} className="crm-card-soft">
-                      <Space direction="vertical" size={6} style={{ width: '100%' }}>
+                      <Space orientation="vertical" size={6} style={{ width: '100%' }}>
                         <Space style={{ justifyContent: 'space-between', width: '100%' }}>
                           <Text strong>{item.no}</Text>
                           <Tag color={item.risk.includes('逾期') || item.risk.includes('低') ? 'red' : 'orange'}>{item.risk}</Tag>
@@ -69,25 +69,25 @@ export default function SalesCashPage() {
 
         <Row gutter={[16, 16]}>
           <Col xs={24} xl={15}>
-            <Card bordered={false} title="闭环里程碑">
+            <Card variant="borderless" title="闭环里程碑">
               <Steps
                 current={2}
-                items={salesCashMilestones.map((item) => ({ title: item.title, description: item.owner }))}
+                items={salesCashMilestones.map((item) => ({ title: item.title, content: item.owner }))}
               />
-              <Timeline style={{ marginTop: 24 }} items={salesCashMilestones.map((item) => ({ children: <Space direction="vertical" size={0}><Text strong>{item.title}</Text><Text type="secondary">{item.desc}</Text></Space> }))} />
+              <Timeline style={{ marginTop: 24 }} items={salesCashMilestones.map((item) => ({ content: <Space orientation="vertical" size={0}><Text strong>{item.title}</Text><Text type="secondary">{item.desc}</Text></Space> }))} />
             </Card>
           </Col>
           <Col xs={24} xl={9}>
-            <Card bordered={false} title="阻塞归因">
-              <Space direction="vertical" style={{ width: '100%' }}>
+            <Card variant="borderless" title="阻塞归因">
+              <Space orientation="vertical" style={{ width: '100%' }}>
                 <Text>低毛利报价</Text><Progress percent={42} status="exception" />
                 <Text>客户资料缺失</Text><Progress percent={35} strokeColor="#faad14" />
                 <Text>单证未校验</Text><Progress percent={28} strokeColor="#722ed1" />
                 <Text>水单待核销</Text><Progress percent={38} strokeColor="#52c41a" />
               </Space>
             </Card>
-            <Card bordered={false} title="今日建议" style={{ marginTop: 16 }}>
-              <Space direction="vertical" size={12}>
+            <Card variant="borderless" title="今日建议" style={{ marginTop: 16 }}>
+              <Space orientation="vertical" size={12}>
                 <div className="crm-card-soft"><Text strong>先处理审批</Text><br /><Text type="secondary">低毛利报价会阻塞后续发送和转订单。</Text></div>
                 <div className="crm-card-soft"><Text strong>再处理尾款</Text><br /><Text type="secondary">EuroNova 尾款逾期影响订单完结。</Text></div>
                 <div className="crm-card-soft"><Text strong>最后补单证</Text><br /><Text type="secondary">待发货订单需先完成 CI / PL 人工校验。</Text></div>

@@ -7,6 +7,7 @@ import { useMemo, useState } from 'react'
 import { AppShell } from '@/components/layout/AppShell'
 import { PageHeader } from '@/components/common/PageHeader'
 import { StatusTag } from '@/components/common/StatusTag'
+import { NextActionPanel } from '@/components/common/NextActionPanel'
 import { paymentReceipts, payments, paymentVerificationChecklist } from '@/frontend/mockData'
 
 const { Text, Paragraph } = Typography
@@ -28,7 +29,7 @@ export default function PaymentsPage() {
   }, [selected])
 
   const columns: ColumnsType<PaymentRecord> = [
-    { title: '回款编号', dataIndex: 'paymentNo', fixed: 'left', width: 190, render: (value, record) => <Space direction="vertical" size={0}><Text strong>{value}</Text><Text type="secondary">{record.orderNo}</Text></Space> },
+    { title: '回款编号', dataIndex: 'paymentNo', fixed: 'left', width: 190, render: (value, record) => <Space orientation="vertical" size={0}><Text strong>{value}</Text><Text type="secondary">{record.orderNo}</Text></Space> },
     { title: '客户', dataIndex: 'customer', width: 180 },
     { title: '类型', dataIndex: 'type', width: 100, render: (value) => <Tag>{value === 'deposit' ? '定金' : '尾款'}</Tag> },
     { title: '计划金额', dataIndex: 'planned', width: 130 },
@@ -48,30 +49,30 @@ export default function PaymentsPage() {
 
   return (
     <AppShell>
-      <Space direction="vertical" size={20} style={{ width: '100%' }}>
+      <Space orientation="vertical" size={20} style={{ width: '100%' }}>
         <PageHeader title="回款中心" subtitle="定金、尾款、运费、手续费、逾期预警、水单上传和财务核销" actions={<Button type="primary" icon={<BankOutlined />} onClick={() => setRegisterOpen(true)}>登记回款</Button>} />
-        <Alert showIcon type="warning" message="上传水单不等于已核销，必须由财务确认银行到账后才进入已核销状态，并写入审计日志。" />
+        <Alert showIcon type="warning" title="上传水单不等于已核销，必须由财务确认银行到账后才进入已核销状态，并写入审计日志。" />
 
         <Row gutter={[16, 16]}>
           <Col xs={24} xl={17}>
-            <Card bordered={false} title="收款计划">
+            <Card variant="borderless" title="收款计划">
               <Table columns={columns} dataSource={payments} scroll={{ x: 1250 }} />
             </Card>
           </Col>
           <Col xs={24} xl={7}>
-            <Card bordered={false} title="应收健康度">
-              <Space direction="vertical" style={{ width: '100%' }} size={14}>
+            <Card variant="borderless" title="应收健康度">
+              <Space orientation="vertical" style={{ width: '100%' }} size={14}>
                 <Text>本月回款达成</Text><Progress percent={76} />
                 <Text>逾期金额占比</Text><Progress percent={12} status="exception" />
                 <Text>待核销水单</Text><Progress percent={38} strokeColor="#faad14" />
-                <div className="crm-card-soft"><Text strong>财务提醒</Text><br /><Text type="secondary">核销前确认付款主体、到账金额、手续费、汇差和对应订单，异常款项需复核。</Text></div>
+                <div className="crm-card-soft"><Text strong>财务提醒</Text><br /><Text type="secondary">核销前确认付款主体、到账金额、手续费、汇差和对应订单，异常款项需复核。</Text></div><NextActionPanel title="财务下一步" items={[{ key: 'p1', title: '优先处理逾期尾款', desc: '逾期记录会阻断发货和订单完结。', owner: '财务', level: 'risk' }, { key: 'p2', title: '核对待核销水单', desc: '上传凭证后仍需银行到账确认。', owner: '财务', level: 'warning' }, { key: 'p3', title: '记录手续费和汇差', desc: '短付、手续费、汇差需留痕，避免账实不符。', owner: '财务', level: 'normal' }]} />
               </Space>
             </Card>
           </Col>
         </Row>
 
         <Modal width={760} title="回款核销" open={Boolean(selected)} onCancel={() => setSelected(null)} okText="确认核销" cancelText="取消" onOk={() => setSelected(null)}>
-          <Space direction="vertical" size={16} style={{ width: '100%' }}>
+          <Space orientation="vertical" size={16} style={{ width: '100%' }}>
             {selected ? (
               <Descriptions bordered size="small" column={2} items={[
                 { key: 'paymentNo', label: '回款编号', children: selected.paymentNo },
@@ -90,7 +91,7 @@ export default function PaymentsPage() {
             </Card>
 
             <Card size="small" title="核销检查清单">
-              <Space direction="vertical">
+              <Space orientation="vertical">
                 {paymentVerificationChecklist.map((item) => <Checkbox key={item.key} defaultChecked={!item.required || selected?.status === 'paid'}>{item.label}{item.required ? <Text type="danger"> *</Text> : null}</Checkbox>)}
               </Space>
             </Card>
@@ -103,7 +104,7 @@ export default function PaymentsPage() {
               </Row>
             </Form>
 
-            <Alert showIcon type="info" icon={<AuditOutlined />} message="核销动作必须由财务角色完成；后台接入后需要记录操作者、时间、凭证、金额和订单关联。" />
+            <Alert showIcon type="info" icon={<AuditOutlined />} title="核销动作必须由财务角色完成；后台接入后需要记录操作者、时间、凭证、金额和订单关联。" />
           </Space>
         </Modal>
 

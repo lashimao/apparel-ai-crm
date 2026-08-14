@@ -15,3 +15,30 @@ body { margin: 0; background: var(--crm-bg); color: #101828; }
 .crm-kpi-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; }
 @media (max-width: 1200px) { .crm-kpi-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (max-width: 768px) { .crm-kpi-grid { grid-template-columns: 1fr; } .crm-content { padding: 12px; } }
+
+.crm-line-card {
+  border: 1px solid var(--crm-border);
+  border-radius: 14px;
+  background: #fff;
+}
+.crm-line-summary {
+  background: #fbfcff;
+  border: 1px dashed var(--crm-border);
+  border-radius: 10px;
+  padding: 8px 10px;
+}
+
+.crm-header-search .ant-input-affix-wrapper {
+  height: 34px;
+  line-height: 32px;
+}
+.crm-header-search input {
+  line-height: 20px;
+}
+
+.crm-action-row {
+  border: 1px solid var(--crm-border);
+  border-radius: 12px;
+  padding: 10px 12px;
+  background: #fff;
+}
