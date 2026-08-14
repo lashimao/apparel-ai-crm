@@ -24,6 +24,11 @@ const labelMap: Record<string, string> = {
   verified: '已核销',
   draft: '草稿',
   generated: '已生成',
+  completed: '已完成',
+  missing: '缺失',
+  risk: '有风险',
+  processing: '处理中',
+  not_required: '无需审批',
 }
 
 export function StatusTag({ value }: { value: string }) {

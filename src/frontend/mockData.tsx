@@ -135,6 +135,10 @@ export const salesCashTodos = [
 ]
 
 export const statusColor: Record<string, string> = {
+  missing: 'red',
+  risk: 'orange',
+  processing: 'blue',
+  not_required: 'default',
   new: 'blue', assigned: 'cyan', quoted: 'gold', approval: 'red', pending: 'orange', approved: 'green', rejected: 'red', calculated: 'blue', sent: 'purple', customer_confirmed: 'green', converted: 'green', confirmed: 'blue', ready_to_ship: 'gold', in_production: 'purple', paid: 'blue', partial: 'orange', overdue: 'red', verified: 'green', draft: 'default', generated: 'blue', completed: 'green', '待人工确认': 'red', '需审批': 'red', '处理中': 'blue', '已完成': 'green', '待建档': 'orange', '待触达': 'blue', '已跟进': 'green',
 }
 
@@ -186,6 +190,82 @@ export const salesCashBoard = [
   },
 ]
 
+
+
+export const customerContacts = [
+  { key: 'CT001', customerKey: 'C001', name: 'Emily Carter', role: 'Purchasing Manager', email: 'emily.carter@atlas.example', phone: '+1 312 555 0188', whatsapp: '+1 312 555 0188', preference: '邮件 + WhatsApp', decision: '核心决策人' },
+  { key: 'CT002', customerKey: 'C001', name: 'James Miller', role: 'Logistics Coordinator', email: 'james.miller@atlas.example', phone: '+1 312 555 0120', whatsapp: '+1 312 555 0120', preference: '邮件', decision: '物流确认' },
+  { key: 'CT003', customerKey: 'C002', name: 'Oliver Smith', role: 'Sourcing Lead', email: 'oliver@buildmart.example', phone: '+61 2 5550 1212', whatsapp: '+61 455 000 212', preference: 'WhatsApp', decision: '询价负责人' },
+  { key: 'CT004', customerKey: 'C003', name: 'Klara Weiss', role: 'Finance Controller', email: 'finance@euronova.example', phone: '+49 30 5550 1188', whatsapp: '+49 170 000 1188', preference: '邮件', decision: '付款确认' },
+]
+
+export const customerFollowUps = [
+  { key: 'FU001', customerKey: 'C001', time: '2026-08-13 16:40', type: 'WhatsApp', owner: 'Lina', content: '客户确认 40HQ 排期，希望 9 月第一周前完成装柜。', next: '向生产确认最晚交货日期', sentiment: '积极' },
+  { key: 'FU002', customerKey: 'C001', time: '2026-08-12 10:20', type: 'Email', owner: 'Lina', content: '发送 PI 草稿并补充付款条款。', next: '等待财务确认定金到账', sentiment: '中性' },
+  { key: 'FU003', customerKey: 'C002', time: '2026-08-13 11:30', type: 'Call', owner: 'Marco', content: '客户反馈 DDP 总价高，要求拆分海运费与本地派送费。', next: '复核 DDP 报价毛利并提交审批', sentiment: '价格敏感' },
+  { key: 'FU004', customerKey: 'C003', time: '2026-08-11 09:05', type: 'Email', owner: 'Anna', content: '已催收尾款水单，客户财务承诺本周内处理。', next: '财务跟进到账截图', sentiment: '需催促' },
+]
+
+export const inquiryRequirements = [
+  { key: 'RQ001', inquiryKey: 'I001', field: '产品型号', value: 'PLA / PETG Filament', status: 'completed', source: 'AI 已识别' },
+  { key: 'RQ002', inquiryKey: 'I001', field: '数量', value: '待确认', status: 'missing', source: '原文缺失' },
+  { key: 'RQ003', inquiryKey: 'I001', field: '目的港', value: 'Hamburg / 待客户确认', status: 'risk', source: 'AI 推断' },
+  { key: 'RQ004', inquiryKey: 'I001', field: '包装方式', value: 'Neutral box / OEM 待确认', status: 'missing', source: '需业务员追问' },
+  { key: 'RQ005', inquiryKey: 'I002', field: '产品型号', value: 'ABS Filament', status: 'completed', source: 'AI 已识别' },
+  { key: 'RQ006', inquiryKey: 'I002', field: '数量', value: '800 kg', status: 'completed', source: '客户原文' },
+  { key: 'RQ007', inquiryKey: 'I002', field: '目的港', value: 'Valparaiso', status: 'completed', source: '客户原文' },
+]
+
+export const inquiryMessages = [
+  { key: 'IM001', inquiryKey: 'I001', sender: 'customer', time: '2026-08-13 09:12', channel: 'Alibaba', content: 'Hello, we are looking for PLA and PETG filament for Germany market. Please send best price and lead time.' },
+  { key: 'IM002', inquiryKey: 'I001', sender: 'ai', time: '2026-08-13 09:13', channel: 'AI', content: '识别为高意向批发询盘，但缺少数量、包装、目的港和付款条款。建议先追问关键报价条件。' },
+  { key: 'IM003', inquiryKey: 'I002', sender: 'customer', time: '2026-08-13 10:44', channel: 'Website', content: 'Need 800kg ABS filament to Chile, Valparaiso port. Please quote CIF and production time.' },
+]
+
+export const quotationLineItems = [
+  { key: 'QL001', quoteKey: 'Q001', product: 'PLA Filament 1.75mm', spec: '1kg/spool, neutral box', qty: 3200, unit: 'kg', cost: 5.18, price: 6.05, freight: 0.42, fee: 0.16, locked: true, profitRate: 14.4 },
+  { key: 'QL002', quoteKey: 'Q001', product: 'PETG Filament 1.75mm', spec: '1kg/spool, neutral box', qty: 1800, unit: 'kg', cost: 6.08, price: 7.28, freight: 0.48, fee: 0.18, locked: false, profitRate: 15.2 },
+  { key: 'QL003', quoteKey: 'Q002', product: 'PLA Matte Filament', spec: '12 colors mixed', qty: 2400, unit: 'kg', cost: 5.25, price: 7.2, freight: 0.36, fee: 0.15, locked: false, profitRate: 24.2 },
+  { key: 'QL004', quoteKey: 'Q003', product: 'PLA Filament 1.75mm', spec: 'OEM color box', qty: 8000, unit: 'kg', cost: 5.12, price: 6.95, freight: 0.31, fee: 0.14, locked: true, profitRate: 22.8 },
+]
+
+export const quotationCostItems = [
+  { key: 'QC001', quoteKey: 'Q001', name: '产品成本', amount: 27600, note: '按最近供应价 + 安全库存成本' },
+  { key: 'QC002', quoteKey: 'Q001', name: '国际运费', amount: 4200, note: 'DDP 分摊，需二次确认' },
+  { key: 'QC003', quoteKey: 'Q001', name: '平台/银行手续费', amount: 860, note: '按 2.0% 估算' },
+  { key: 'QC004', quoteKey: 'Q001', name: '包装与贴标', amount: 1380, note: '客户要求中性包装' },
+  { key: 'QC005', quoteKey: 'Q002', name: '产品成本', amount: 18100, note: '常规产品成本' },
+  { key: 'QC006', quoteKey: 'Q002', name: '国际运费', amount: 2300, note: 'CIF Hamburg 预估' },
+]
+
+export const orderMilestones = [
+  { key: 'OM001', orderKey: 'O001', title: '订单确认', date: '2026-08-09', status: 'completed', owner: 'Lina', note: '报价转订单，PI 已生成' },
+  { key: 'OM002', orderKey: 'O001', title: '定金核销', date: '2026-08-15', status: 'completed', owner: 'Finance', note: '定金 USD 25,920 已到账' },
+  { key: 'OM003', orderKey: 'O001', title: '生产排期', date: '2026-08-18', status: 'processing', owner: '跟单', note: '等待 40HQ 排产确认' },
+  { key: 'OM004', orderKey: 'O001', title: '单证准备', date: '2026-08-28', status: 'pending', owner: 'Lina', note: 'CI / PL / BL 草稿待生成' },
+  { key: 'OM005', orderKey: 'O002', title: '订单确认', date: '2026-08-04', status: 'completed', owner: 'Anna', note: '客户已确认生产' },
+  { key: 'OM006', orderKey: 'O002', title: '尾款核销', date: '2026-08-01', status: 'risk', owner: 'Finance', note: '尾款逾期，发货前必须核销' },
+]
+
+export const orderProducts = [
+  { key: 'OP001', orderKey: 'O001', sku: 'PLA-175-NW', product: 'PLA Filament 1.75mm', qty: 7200, shipped: 0, unit: 'kg', status: '生产中' },
+  { key: 'OP002', orderKey: 'O001', sku: 'PETG-175-NW', product: 'PETG Filament 1.75mm', qty: 4200, shipped: 0, unit: 'kg', status: '待排产' },
+  { key: 'OP003', orderKey: 'O002', sku: 'PLA-OEM-EU', product: 'PLA OEM Box', qty: 15000, shipped: 0, unit: 'kg', status: '待发货' },
+]
+
+export const paymentVerificationChecklist = [
+  { key: 'PV001', label: '银行到账金额与订单收款计划一致', required: true },
+  { key: 'PV002', label: '付款主体与客户/合同主体一致', required: true },
+  { key: 'PV003', label: '汇率差、手续费和短付金额已记录', required: true },
+  { key: 'PV004', label: '水单、银行流水或平台截图已归档', required: true },
+  { key: 'PV005', label: '异常付款已提交财务主管复核', required: false },
+]
+
+export const paymentReceipts = [
+  { key: 'PR001', paymentKey: 'P001', file: 'EuroNova_balance_remittance.pdf', amount: 'USD 18,200', uploadedAt: '待上传', status: 'missing' },
+  { key: 'PR002', paymentKey: 'P002', file: 'Atlas_deposit_bank_slip.pdf', amount: 'USD 25,920', uploadedAt: '2026-08-10 15:20', status: 'verified' },
+  { key: 'PR003', paymentKey: 'P003', file: 'Andes_partial_receipt.png', amount: 'USD 5,000', uploadedAt: '2026-08-11 17:05', status: 'pending' },
+]
 export const salesCashMilestones = [
   { key: 'M001', title: '询盘进入', desc: 'AI 识别产品、数量、语言、意向与缺失字段', owner: '销售' },
   { key: 'M002', title: '报价核算', desc: '成本、费用、运费、汇率、毛利底线全部可见', owner: '销售' },
