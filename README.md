@@ -1,4 +1,4 @@
-# NexFab AI CRM
+# NexFab AI 外贸CRM
 
 外贸 AI CRM 前端与业务规划项目，当前重点是前端框架与销售到回款闭环预览。
 
