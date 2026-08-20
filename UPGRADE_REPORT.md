@@ -14,7 +14,7 @@
 6. Git 提交并推送到 GitHub 仓库。
 7. 使用 GitHub 远程分支核验最新 commit。
 
-GitHub 仓库：<https://github.com/lashimao/nexfab-ai-crm>
+GitHub 仓库：<https://github.com/lashimao/apparel-ai-crm>
 
 ---
 

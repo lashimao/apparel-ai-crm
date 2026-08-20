@@ -2,7 +2,7 @@
 
 外贸 AI CRM 前端与业务规划项目，当前重点是前端框架与销售到回款闭环预览。
 
-项目仓库：<https://github.com/lashimao/nexfab-ai-crm>
+项目仓库：<https://github.com/lashimao/apparel-ai-crm>
 
 ## 当前版本
 
